@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="pXNaPia_02Tnb7lrCfBQrnUEq9qJpi0HOq_Vrvn0zS0" />
+    <title>KARNAIN AI - Settings</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        #bg-video { position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; opacity: 0.6; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 0; }
+        .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 2rem; background: rgba(10,10,10,0.7); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.08); box-sizing: border-box; }
+        .logo { font-family: 'Custom1', sans-serif; font-size: 1.8rem; color: #fff; }
+        .logo span { color: #f0c; }
+        .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; margin:0; padding:0; }
+        .nav-links a { color:#fff; text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.4rem 0.8rem; border-radius:8px; transition:0.3s; }
+        .nav-links a:hover, .nav-links a.active { background:rgba(255,0,204,0.15); color:#f0c; }
+        .nav-actions { display:flex; align-items:center; gap:0.5rem; }
+        #theme-toggle { background:transparent; border:1px solid #555; color:#fff; padding:0.3rem 0.8rem; border-radius:5px; cursor:pointer; }
+        #hamburger { display:none; background:none; border:none; color:#fff; font-size:1.6rem; cursor:pointer; }
+        @media(max-width:768px){ .nav-links{ display:none; flex-direction:column; background:rgba(0,0,0,0.95); position:absolute; top:60px; left:0; width:100%; padding:1rem; gap:0.5rem; box-sizing:border-box; } .nav-links.open{ display:flex; } #hamburger{ display:block; } }
+        .container { max-width: 600px; margin: 0 auto; padding: 6rem 2rem 3rem; position: relative; z-index: 1; }
+        h1 { font-family: 'Custom1', sans-serif; color: #f0c; }
+        .settings-box { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border-radius: 20px; padding: 2rem; border: 1px solid rgba(255,255,255,0.1); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; color: #aaa; }
+        .form-group input, .form-group select { width: 100%; padding: 0.7rem; border-radius: 10px; border: 1px solid #555; background: rgba(0,0,0,0.5); color: #fff; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #f0c; }
+        .btn-primary { background: #f0c; color: #000; border: none; padding: 0.7rem 1.5rem; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .btn-danger { background: #ff004f; color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; }
+        body.light { background: #f0f0f0; color: #111; }
+        body.light .navbar { background: rgba(255,255,255,0.8); border-bottom-color: #ddd; }
+        body.light .logo { color: #111; }
+        body.light .nav-links a { color: #111; }
+        body.light .nav-links a:hover { background: rgba(0,0,0,0.05); color: #f0c; }
+        body.light .settings-box { background: rgba(0,0,0,0.05); border-color: #ccc; }
+        body.light .form-group input, body.light .form-group select { background: #fff; color: #111; border-color: #ccc; }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-waves-3956-large.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="logo">KARNAIN<span>AI</span></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="settings.html" class="active">Settings</a></li>
+            <li><a href="history.html">History</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="theme-toggle">🌓</button>
+            <button id="hamburger">☰</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>⚙️ Settings</h1>
+        <div class="settings-box">
+            <div class="form-group">
+                <label>OpenRouter API Key</label>
+                <input type="password" id="apiKeyInput" placeholder="sk-or-v1-..." />
+                <button id="saveApiKey" class="btn-primary">Simpan</button>
+            </div>
+            <div class="form-group">
+                <label>Model AI</label>
+                <select id="modelSelect">
+                    <option value="meta-llama/llama-3.1-8b-instruct:free">Llama 3.1 8B (Free)</option>
+                    <option value="deepseek/deepseek-chat:free">DeepSeek V3 (Free)</option>
+                    <option value="mistralai/mistral-7b-instruct:free">Mistral 7B (Free)</option>
+                    <option value="google/gemini-2.0-flash-exp:free">Gemini 2.0 Flash (Free)</option>
+                    <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo (Paid)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Bahasa</label>
+                <select id="langSelect">
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <button id="resetData" class="btn-danger">Reset Semua Data</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { settingsInit } from './js/modules/settings.js';
+        import { themeInit } from './js/modules/theme.js';
+        import { navInit } from './js/modules/nav.js';
+        document.addEventListener('DOMContentLoaded', function() {
+            themeInit();
+            settingsInit();
+            navInit();
+        });
+    </script>
+</body>
+</html>

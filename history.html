@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="pXNaPia_02Tnb7lrCfBQrnUEq9qJpi0HOq_Vrvn0zS0" />
+    <title>KARNAIN AI - History</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        #bg-video { position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; opacity: 0.6; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 0; }
+        .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 2rem; background: rgba(10,10,10,0.7); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.08); box-sizing: border-box; }
+        .logo { font-family: 'Custom1', sans-serif; font-size: 1.8rem; color: #fff; }
+        .logo span { color: #f0c; }
+        .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; margin:0; padding:0; }
+        .nav-links a { color:#fff; text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.4rem 0.8rem; border-radius:8px; transition:0.3s; }
+        .nav-links a:hover, .nav-links a.active { background:rgba(255,0,204,0.15); color:#f0c; }
+        .nav-actions { display:flex; align-items:center; gap:0.5rem; }
+        #theme-toggle { background:transparent; border:1px solid #555; color:#fff; padding:0.3rem 0.8rem; border-radius:5px; cursor:pointer; }
+        #hamburger { display:none; background:none; border:none; color:#fff; font-size:1.6rem; cursor:pointer; }
+        @media(max-width:768px){ .nav-links{ display:none; flex-direction:column; background:rgba(0,0,0,0.95); position:absolute; top:60px; left:0; width:100%; padding:1rem; gap:0.5rem; box-sizing:border-box; } .nav-links.open{ display:flex; } #hamburger{ display:block; } }
+        .container { max-width: 800px; margin: 0 auto; padding: 6rem 2rem 3rem; position: relative; z-index: 1; }
+        h1 { font-family: 'Custom1', sans-serif; color: #f0c; }
+        .history-list { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border-radius: 20px; padding: 1.5rem; max-height: 500px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); }
+        .history-item { padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .history-item .user { color: #f0c; }
+        .history-item .ai { color: #aaa; }
+        .history-item .time { font-size: 0.7rem; color: #555; float: right; }
+        .btn-danger { background: #ff004f; color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; margin-top: 1rem; }
+        body.light { background: #f0f0f0; color: #111; }
+        body.light .navbar { background: rgba(255,255,255,0.8); border-bottom-color: #ddd; }
+        body.light .logo { color: #111; }
+        body.light .nav-links a { color: #111; }
+        body.light .nav-links a:hover { background: rgba(0,0,0,0.05); color: #f0c; }
+        body.light .history-list { background: rgba(0,0,0,0.05); border-color: #ccc; }
+        body.light .history-item .ai { color: #555; }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-waves-3956-large.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="logo">KARNAIN<span>AI</span></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="history.html" class="active">History</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="theme-toggle">🌓</button>
+            <button id="hamburger">☰</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>📜 Riwayat Chat</h1>
+        <div id="historyList" class="history-list">
+            <div style="color:#aaa;text-align:center;padding:2rem;">Memuat...</div>
+        </div>
+        <button id="clearHistory" class="btn-danger">Hapus Semua</button>
+    </div>
+
+    <script type="module">
+        import { historyInit } from './js/modules/history.js';
+        import { themeInit } from './js/modules/theme.js';
+        import { navInit } from './js/modules/nav.js';
+        document.addEventListener('DOMContentLoaded', function() {
+            themeInit();
+            historyInit();
+            navInit();
+        });
+    </script>
+</body>
+</html>

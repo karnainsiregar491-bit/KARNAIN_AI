@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="pXNaPia_02Tnb7lrCfBQrnUEq9qJpi0HOq_Vrvn0zS0" />
+    <title>KARNAIN AI - Chat</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        #bg-video { position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; opacity: 0.6; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 0; }
+        .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 2rem; background: rgba(10,10,10,0.7); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.08); box-sizing: border-box; }
+        .logo { font-family: 'Custom1', sans-serif; font-size: 1.8rem; color: #fff; }
+        .logo span { color: #f0c; }
+        .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; margin:0; padding:0; }
+        .nav-links a { color:#fff; text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.4rem 0.8rem; border-radius:8px; transition:0.3s; }
+        .nav-links a:hover, .nav-links a.active { background:rgba(255,0,204,0.15); color:#f0c; }
+        .nav-actions { display:flex; align-items:center; gap:0.5rem; }
+        #theme-toggle { background:transparent; border:1px solid #555; color:#fff; padding:0.3rem 0.8rem; border-radius:5px; cursor:pointer; }
+        #hamburger { display:none; background:none; border:none; color:#fff; font-size:1.6rem; cursor:pointer; }
+        @media(max-width:768px){ .nav-links{ display:none; flex-direction:column; background:rgba(0,0,0,0.95); position:absolute; top:60px; left:0; width:100%; padding:1rem; gap:0.5rem; box-sizing:border-box; } .nav-links.open{ display:flex; } #hamburger{ display:block; } }
+        .main-container { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; padding-top: 60px; }
+        .avatar-side { background: radial-gradient(circle at center, #1a0a2e, #0a0a0a); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; }
+        .avatar-container { width: 100%; max-width: 500px; aspect-ratio: 1/1; border-radius: 20px; overflow: hidden; background: #111; position: relative; }
+        #avatarCanvas { width: 100%; height: 100%; display: block; }
+        .chat-side { background: rgba(10,10,10,0.95); display: flex; flex-direction: column; padding: 2rem; border-left: 1px solid rgba(255,255,255,0.05); }
+        .chat-side h2 { font-family: 'Custom1', sans-serif; color: #f0c; }
+        .chat-messages { flex:1; overflow-y:auto; margin-bottom:0.8rem; display:flex; flex-direction:column; gap:0.4rem; padding-right:0.3rem; }
+        .chat-messages .msg { padding:0.6rem 1rem; border-radius:12px; max-width:80%; word-wrap:break-word; }
+        .chat-messages .msg.user { background:#f0c; color:#000; align-self:flex-end; margin-left:auto; }
+        .chat-messages .msg.ai { background:rgba(255,255,255,0.08); color:#fff; align-self:flex-start; }
+        .chat-input-area { display:flex; gap:0.5rem; margin-top:0.5rem; flex-shrink:0; }
+        .chat-input-area input { flex:1; padding:0.7rem 1rem; border-radius:12px; border:1px solid #555; background:rgba(0,0,0,0.5); color:#fff; }
+        .chat-input-area input:focus { outline:none; border-color:#f0c; }
+        .chat-input-area button { padding:0.7rem 1.5rem; background:#f0c; border:none; border-radius:12px; font-weight:bold; cursor:pointer; color:#000; }
+        .chat-toolbar { display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap; flex-shrink:0; }
+        .btn-secondary { background:rgba(255,255,255,0.1); border:1px solid #555; color:#fff; padding:0.4rem 0.8rem; border-radius:50px; cursor:pointer; }
+        .stats-bar { margin-top:0.5rem; font-size:0.8rem; color:#aaa; display:flex; gap:1rem; flex-shrink:0; }
+        @media (max-width: 768px) { .main-container { grid-template-columns:1fr; grid-template-rows:40vh 60vh; padding-top:60px; } .avatar-side { padding:1rem; } .chat-side { border-left:none; border-top:1px solid rgba(255,255,255,0.05); padding:1rem; } }
+        body.light { background:#f0f0f0; color:#111; }
+        body.light .navbar { background:rgba(255,255,255,0.8); border-bottom-color:#ddd; }
+        body.light .logo { color:#111; }
+        body.light .nav-links a { color:#111; }
+        body.light .nav-links a:hover { background:rgba(0,0,0,0.05); color:#f0c; }
+        body.light .avatar-side { background:radial-gradient(circle at center, #e0d0f0, #f0f0f0); }
+        body.light .chat-side { background:#fff; border-left-color:#ddd; }
+        body.light .chat-messages .msg.ai { background:rgba(0,0,0,0.05); color:#111; }
+        body.light .chat-input-area input { background:#fff; color:#111; border-color:#ccc; }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-waves-3956-large.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="logo">KARNAIN<span>AI</span></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="history.html">History</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button id="theme-toggle">🌓</button>
+            <button id="hamburger">☰</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="avatar-side">
+            <div class="avatar-container">
+                <canvas id="avatarCanvas"></canvas>
+            </div>
+        </div>
+        <div class="chat-side">
+            <h2>🤖 AI Avatar</h2>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Ketik pesan..." />
+                <button id="sendBtn">Kirim</button>
+            </div>
+            <div class="chat-toolbar">
+                <button id="speakBtn" class="btn-secondary">🔊 Bicara</button>
+                <button id="clearBtn" class="btn-secondary">🗑️ Hapus</button>
+                <button id="exportBtn" class="btn-secondary">📥 Export</button>
+            </div>
+            <div class="stats-bar">
+                <span>💬 <span id="statsTotal">0</span> pesan</span>
+                <span>📝 <span id="statsWords">0</span> kata</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>/div>
+            </div>
+        </div>
+        <div class="chat-side">
+            <h2>🤖 AI Avatar</h2>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Ketik pesan..." />
+                <button id="sendBtn">Kirim</button>
+            </div>
+            <div class="chat-toolbar">
+                <button id="speakBtn" class="btn-secondary">🔊 Bicara</button>
+                <button id="clearBtn" class="btn-secondary">🗑️ Hapus</button>
+                <button id="exportBtn" class="btn-secondary">📥 Export</button>
+            </div>
+            <div class="stats-bar">
+                <span>💬 <span id="statsTotal">0</span> pesan</span>
+                <span>📝 <span id="statsWords">0</span> kata</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

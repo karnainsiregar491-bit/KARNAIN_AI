@@ -1,0 +1,7 @@
+.env
+logs/
+cache/
+uploads/
+vendor/
+*.log
+.htpasswd

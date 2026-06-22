@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteRule ^api/chat$ backend/api/chat.php [L]
+RewriteRule ^api/settings$ backend/api/settings.php [L]
+ErrorDocument 404 /404.html
+Options -Indexes

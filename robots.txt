@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://karnain-sir2.vercel.app/sitemap.xml
